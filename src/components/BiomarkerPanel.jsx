@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fingerprint, AlertTriangle, CheckCircle2, Cpu, HelpCircle } from 'lucide-react';
+import { Fingerprint, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 export default function BiomarkerPanel({
   deepfakeScore = 0.0,
@@ -27,37 +27,37 @@ export default function BiomarkerPanel({
   return (
     <div className="tactical-card rounded p-4 font-mono select-none">
       {/* Panel Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <Fingerprint className="w-4 h-4 text-emerald-400" />
-          <span className="text-xs font-semibold text-slate-200 tracking-wider">
+          <Fingerprint className="w-4 h-4 text-emerald-700" />
+          <span className="text-xs font-bold text-slate-800 tracking-wider">
             SEC // 02 · ACOUSTIC BIOMARKER MATRIX (BRANCH A)
           </span>
         </div>
 
         {/* Prediction Status Badge */}
         <div
-          className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold border ${
+          className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold border shadow-xs ${
             isSpoof
-              ? 'bg-red-950/60 border-red-800 text-red-400'
+              ? 'bg-red-50 border-red-200 text-red-800'
               : isWarning
-              ? 'bg-amber-950/60 border-amber-800 text-amber-400'
-              : 'bg-emerald-950/60 border-emerald-800 text-emerald-400'
+              ? 'bg-amber-50 border-amber-200 text-amber-800'
+              : 'bg-emerald-50 border-emerald-200 text-emerald-800'
           }`}
         >
           {isSpoof ? (
             <>
-              <AlertTriangle className="w-3.5 h-3.5" />
+              <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
               <span>SYNTHETIC CLONE DETECTED</span>
             </>
           ) : isWarning ? (
             <>
-              <AlertTriangle className="w-3.5 h-3.5" />
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
               <span>ELEVATED ANOMALY</span>
             </>
           ) : (
             <>
-              <CheckCircle2 className="w-3.5 h-3.5" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>BONAFIDE HUMAN SPEECH</span>
             </>
           )}
@@ -68,31 +68,31 @@ export default function BiomarkerPanel({
       <div className="mt-3 grid grid-cols-2 gap-3">
         {/* Left: Combined Spoof Confidence */}
         <div className="tactical-well p-3 rounded">
-          <div className="flex justify-between items-center text-[10px] text-slate-400">
+          <div className="flex justify-between items-center text-[10px] text-slate-500 font-semibold">
             <span>CLONE PROBABILITY</span>
-            <span className="text-slate-300">THRESHOLD: 0.65</span>
+            <span className="text-slate-600">THRESHOLD: 0.65</span>
           </div>
           <div className="mt-1 flex items-baseline gap-2">
             <span
-              className={`text-2xl font-bold ${
+              className={`text-2xl font-extrabold ${
                 isSpoof
-                  ? 'text-red-400'
+                  ? 'text-red-700'
                   : isWarning
-                  ? 'text-amber-400'
-                  : 'text-emerald-400'
+                  ? 'text-amber-700'
+                  : 'text-emerald-700'
               }`}
             >
               {(deepfakeScore * 100).toFixed(1)}%
             </span>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-slate-500 font-medium">
               [Raw: {deepfakeScore.toFixed(4)}]
             </span>
           </div>
           {/* Progress Bar */}
-          <div className="mt-2 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden relative">
+          <div className="mt-2 h-2 w-full bg-slate-200 rounded-full overflow-hidden relative">
             <div
               className={`h-full transition-all duration-300 ${
-                isSpoof ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
+                isSpoof ? 'bg-red-600' : isWarning ? 'bg-amber-500' : 'bg-emerald-600'
               }`}
               style={{ width: `${Math.min(100, deepfakeScore * 100)}%` }}
             />
@@ -100,27 +100,27 @@ export default function BiomarkerPanel({
         </div>
 
         {/* Right: AASIST vs Biomarker Split */}
-        <div className="tactical-well p-3 rounded text-xs space-y-2">
+        <div className="tactical-well p-3 rounded text-xs space-y-2.5">
           <div>
-            <div className="flex justify-between text-[10px] text-slate-400">
+            <div className="flex justify-between text-[10px] text-slate-600 font-semibold">
               <span>AASIST GRAPH SPECTRAL (55%)</span>
-              <span className="text-slate-200">{(aasistSpoofProb * 100).toFixed(1)}%</span>
+              <span className="text-slate-900 font-bold">{(aasistSpoofProb * 100).toFixed(1)}%</span>
             </div>
-            <div className="mt-1 h-1 bg-slate-800 rounded-full overflow-hidden">
+            <div className="mt-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-500"
+                className="h-full bg-blue-700"
                 style={{ width: `${aasistSpoofProb * 100}%` }}
               />
             </div>
           </div>
           <div>
-            <div className="flex justify-between text-[10px] text-slate-400">
+            <div className="flex justify-between text-[10px] text-slate-600 font-semibold">
               <span>PHYSICAL BIOMARKERS (45%)</span>
-              <span className="text-slate-200">{(biomarkerSpoof * 100).toFixed(1)}%</span>
+              <span className="text-slate-900 font-bold">{(biomarkerSpoof * 100).toFixed(1)}%</span>
             </div>
-            <div className="mt-1 h-1 bg-slate-800 rounded-full overflow-hidden">
+            <div className="mt-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-cyan-500"
+                className="h-full bg-amber-600"
                 style={{ width: `${biomarkerSpoof * 100}%` }}
               />
             </div>
@@ -129,20 +129,20 @@ export default function BiomarkerPanel({
       </div>
 
       {/* Granular Physical Speaker Biomarker Gauges */}
-      <div className="mt-3 pt-3 border-t border-slate-800/80">
-        <div className="text-[10px] tracking-wider text-slate-400 font-semibold mb-2 flex items-center justify-between">
+      <div className="mt-3 pt-3 border-t border-slate-200">
+        <div className="text-[10px] tracking-wider text-slate-600 font-bold mb-2 flex items-center justify-between">
           <span>PHYSICAL ACOUSTIC CHARACTERISTICS</span>
           <span className="text-[9px] text-slate-500">CONTENT-INDEPENDENT METRICS</span>
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-[11px]">
           {/* Pitch Jitter */}
-          <div className="p-2 rounded bg-[#090d14] border border-slate-800">
+          <div className="p-2 rounded bg-slate-50 border border-slate-200">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">F0 PITCH JITTER</span>
+              <span className="text-slate-600 font-medium">F0 PITCH JITTER</span>
               <span
-                className={`font-semibold ${
-                  jitterAnomaly ? 'text-amber-400' : 'text-emerald-400'
+                className={`font-bold ${
+                  jitterAnomaly ? 'text-amber-700' : 'text-emerald-700'
                 }`}
               >
                 {pitchJitter.toFixed(2)}%
@@ -154,10 +154,10 @@ export default function BiomarkerPanel({
           </div>
 
           {/* Harmonics to Noise Ratio */}
-          <div className="p-2 rounded bg-[#090d14] border border-slate-800">
+          <div className="p-2 rounded bg-slate-50 border border-slate-200">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">HARMONICS-TO-NOISE (HNR)</span>
-              <span className="text-slate-200 font-semibold">
+              <span className="text-slate-600 font-medium">HARMONICS-TO-NOISE (HNR)</span>
+              <span className="text-slate-900 font-bold">
                 {hnr.toFixed(1)} dB
               </span>
             </div>
@@ -167,12 +167,12 @@ export default function BiomarkerPanel({
           </div>
 
           {/* Vocoder Spectral Flatness */}
-          <div className="p-2 rounded bg-[#090d14] border border-slate-800">
+          <div className="p-2 rounded bg-slate-50 border border-slate-200">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">VOCODER HIGH-FREQ BALANCE</span>
+              <span className="text-slate-600 font-medium">VOCODER HIGH-FREQ BALANCE</span>
               <span
-                className={`font-semibold ${
-                  vocoderAnomaly ? 'text-red-400' : 'text-slate-300'
+                className={`font-bold ${
+                  vocoderAnomaly ? 'text-red-700' : 'text-slate-800'
                 }`}
               >
                 {(vocoderScore * 100).toFixed(0)}%
@@ -184,12 +184,12 @@ export default function BiomarkerPanel({
           </div>
 
           {/* Breath & Micro-pause Naturalness */}
-          <div className="p-2 rounded bg-[#090d14] border border-slate-800">
+          <div className="p-2 rounded bg-slate-50 border border-slate-200">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">BREATH & MICRO-PAUSES</span>
+              <span className="text-slate-600 font-medium">BREATH & MICRO-PAUSES</span>
               <span
-                className={`font-semibold ${
-                  breathAnomaly ? 'text-amber-400' : 'text-emerald-400'
+                className={`font-bold ${
+                  breathAnomaly ? 'text-amber-700' : 'text-emerald-700'
                 }`}
               >
                 {(breathScore * 100).toFixed(0)}%

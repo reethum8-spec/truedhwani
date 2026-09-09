@@ -40,24 +40,24 @@ export default function RootLayout() {
         setIsStreaming,
       }}
     >
-      <div className="min-h-screen bg-[#080c11] text-slate-100 flex flex-col tactical-grid antialiased">
+      <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col tactical-grid antialiased">
         <Header wsStatus={wsStatus} latency={latency} isStreaming={isStreaming} />
 
-        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <Outlet />
         </main>
 
         {/* Forensic Footer Strip */}
-        <footer className="border-t border-slate-800/80 bg-[#05080c] px-6 py-2.5 text-[10px] text-slate-500 font-mono flex flex-col sm:flex-row items-center justify-between gap-2">
+        <footer className="border-t border-slate-200 bg-white px-6 py-3 text-[10px] text-slate-500 font-mono flex flex-col sm:flex-row items-center justify-between gap-2 shadow-xs">
           <div className="flex items-center gap-3">
-            <span className="text-slate-400 font-semibold">TRUEDHWANI INTELLIGENCE ENGINE</span>
+            <span className="text-slate-900 font-bold">TRUEDHWANI INTELLIGENCE ENGINE</span>
             <span>·</span>
             <span>DUAL-BRANCH ADAPTIVE FUSION (AASIST + ZERO-SHOT NLI)</span>
           </div>
           <div className="flex items-center gap-4">
             <span>MODEL: SILERO-VAD · WHISPER-BASE · AASIST-ASVSPOOF</span>
             <span>·</span>
-            <span className="text-emerald-500 font-semibold">SYSTEMS NORMAL</span>
+            <span className="text-emerald-700 font-bold">SYSTEMS NORMAL</span>
           </div>
         </footer>
       </div>

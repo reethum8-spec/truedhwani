@@ -2,35 +2,44 @@
 
 @layer base {
   :root {
-    --bg-main: #0b0f15;
-    --bg-card: #111823;
-    --bg-elevated: #16202f;
-    --bg-well: #080c11;
-    --border-subtle: #1e293b;
-    --border-medium: #334155;
-    --border-accent: #475569;
+    /* Rare Architectural Complementary Palette: Prussian Blue & Burnished Copper-Amber */
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-elevated: #f1f5f9;
+    --bg-well: #f8fafc;
+    --border-subtle: #e2e8f0;
+    --border-medium: #cbd5e1;
+    --border-accent: #94a3b8;
     
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
     --text-muted: #64748b;
     
-    --status-secure: #059669;
-    --status-secure-text: #34d399;
-    --status-secure-bg: rgba(5, 150, 105, 0.12);
-    --status-secure-border: #065f46;
+    /* Complementary Accent: Prussian Blue (215° Hue) */
+    --accent-prussian: #1e40af;
+    --accent-prussian-light: #eff6ff;
+    --accent-prussian-border: #bfdbfe;
     
-    --status-caution: #d97706;
-    --status-caution-text: #fbbf24;
-    --status-caution-bg: rgba(217, 119, 6, 0.12);
-    --status-caution-border: #92400e;
+    /* Complementary Hero: Burnished Copper / Warm Amber (35° Hue) */
+    --accent-copper: #d97706;
+    --accent-copper-light: #fffbeb;
+    --accent-copper-border: #fde68a;
     
-    --status-threat: #dc2626;
-    --status-threat-text: #f87171;
-    --status-threat-bg: rgba(220, 38, 38, 0.15);
-    --status-threat-border: #991b1b;
+    /* Authoritative Status Accents */
+    --status-secure: #047857;
+    --status-secure-text: #065f46;
+    --status-secure-bg: #ecfdf5;
+    --status-secure-border: #a7f3d0;
     
-    --status-telemetry: #2563eb;
-    --status-telemetry-text: #60a5fa;
+    --status-caution: #b45309;
+    --status-caution-text: #78350f;
+    --status-caution-bg: #fffbeb;
+    --status-caution-border: #fde68a;
+    
+    --status-threat: #b91c1c;
+    --status-threat-text: #7f1d1d;
+    --status-threat-bg: #fef2f2;
+    --status-threat-border: #fecaca;
   }
 
   body {
@@ -48,45 +57,46 @@
   }
 }
 
-/* Custom Tactical Scrollbars */
+/* Custom Tactical Scrollbars for Light Laboratory Theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080c11;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94a3b8;
 }
 
-/* Forensic Terminal / Workstation Utilities */
+/* Forensic Laboratory / Workstation Utilities (Light Theme) */
 .tactical-border {
-  border: 1px solid #1e293b;
+  border: 1px solid #e2e8f0;
 }
 
 .tactical-card {
-  background-color: #111823;
-  border: 1px solid #1e293b;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
 }
 
 .tactical-well {
-  background-color: #080c11;
-  border: 1px solid #172030;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
 }
 
 .tactical-grid {
   background-size: 24px 24px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
 }
 
 /* Precision status indicators */

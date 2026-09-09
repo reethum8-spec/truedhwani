@@ -1,29 +1,33 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Shield, Radio, Activity, FileText, Cpu, AlertCircle } from 'lucide-react';
+import { Shield, Radio, Activity, Cpu } from 'lucide-react';
 
 export default function Header({ wsStatus = 'disconnected', latency = 0, isStreaming = false }) {
   const getStatusBadge = () => {
     switch (wsStatus) {
       case 'connected':
         return (
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-emerald-950/40 border border-emerald-800 text-emerald-400 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>WS: SECURE // CONNECTED</span>
-            {latency > 0 && <span className="text-emerald-300/70 border-l border-emerald-800/80 pl-2">{latency}ms</span>}
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            <span className="font-semibold">WS: SECURE // CONNECTED</span>
+            {latency > 0 && (
+              <span className="text-emerald-700/80 border-l border-emerald-300 pl-2 font-mono">
+                {latency}ms
+              </span>
+            )}
           </div>
         );
       case 'connecting':
         return (
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-amber-950/40 border border-amber-800 text-amber-400 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span>WS: HANDSHAKE...</span>
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
+            <span className="font-semibold">WS: HANDSHAKE...</span>
           </div>
         );
       default:
         return (
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-slate-900/80 border border-slate-800 text-slate-400 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-slate-500"></span>
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-slate-100 border border-slate-200 text-slate-600 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-slate-400"></span>
             <span>WS: STANDBY</span>
           </div>
         );
@@ -31,71 +35,73 @@ export default function Header({ wsStatus = 'disconnected', latency = 0, isStrea
   };
 
   return (
-    <header className="border-b border-slate-800/80 bg-[#080c12] select-none">
-      {/* Tactical Top Security Classification Strip */}
-      <div className="bg-[#05080c] border-b border-slate-800/60 px-4 py-0.5 flex justify-between items-center text-[10px] tracking-wider text-slate-400 font-mono">
+    <header className="border-b border-slate-200 bg-white select-none sticky top-0 z-40 shadow-xs">
+      {/* Tactical Top Classification Strip */}
+      <div className="bg-slate-100/80 border-b border-slate-200 px-4 py-1 flex justify-between items-center text-[10px] tracking-wider text-slate-600 font-mono">
         <div className="flex items-center gap-3">
-          <span className="text-slate-300 font-semibold">SECURITY CLEARANCE: PUBLIC // FORENSIC TELEMETRY</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-400">PIPELINE: VAD-SILERO · ASR-WHISPER · AASIST-ENSEMBLE</span>
+          <span className="text-slate-900 font-bold uppercase">SECURITY CLEARANCE: PUBLIC // FORENSIC TELEMETRY</span>
+          <span className="text-slate-300">|</span>
+          <span className="text-slate-600">PIPELINE: VAD-SILERO · ASR-WHISPER · AASIST-ENSEMBLE</span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-slate-400">SAMPLING: 16,000 HZ PCM</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-400">LATENCY TARGET: &lt; 400MS</span>
+          <span className="text-slate-600">SAMPLING: 16,000 HZ PCM</span>
+          <span className="text-slate-300">|</span>
+          <span className="text-slate-600">LATENCY TARGET: &lt; 400MS</span>
         </div>
       </div>
 
       {/* Main Bar */}
       <div className="px-6 py-3 flex items-center justify-between">
-        {/* Left: Brand / System Identity */}
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded border border-slate-700 bg-slate-900 flex items-center justify-center text-slate-100 shadow-inner">
-            <Shield className="w-5 h-5 text-blue-400" />
+        {/* Left: Brand Identity with Prussian Blue & Warm Amber */}
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded border border-blue-900/10 bg-gradient-to-br from-blue-900 to-slate-900 flex items-center justify-center text-white shadow-xs">
+            <Shield className="w-5 h-5 text-amber-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-base font-bold tracking-tight text-white uppercase font-mono">TrueDhwani</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-950/60 border border-blue-800 text-blue-300">
+              <span className="text-base font-bold tracking-tight text-slate-900 uppercase font-mono">
+                TrueDhwani
+              </span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 border border-blue-200 text-blue-800 font-semibold">
                 v1.2.0-FORENSIC
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-mono tracking-tight">
+            <p className="text-xs text-slate-500 font-mono tracking-tight">
               Acoustic Clone Biomarkers & Scam Threat Intercept Station
             </p>
           </div>
         </div>
 
-        {/* Center: Navigation Controls */}
-        <nav className="flex items-center gap-1 bg-[#0b1017] p-1 rounded border border-slate-800 text-xs font-mono">
+        {/* Center: Navigation Tabs with clean laboratory styling */}
+        <nav className="flex items-center gap-1 bg-slate-100 p-1 rounded-md border border-slate-200 text-xs font-mono">
           <NavLink
             to="/live-monitor"
             className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-1.5 rounded transition-colors ${
+              `flex items-center gap-2 px-3 py-1.5 rounded transition-all ${
                 isActive
-                  ? 'bg-slate-800 text-white font-medium border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`
             }
           >
-            <Radio className="w-3.5 h-3.5 text-red-400" />
+            <Radio className="w-3.5 h-3.5 text-red-600" />
             <span>LIVE INTERCEPT</span>
             {isStreaming && (
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span>
             )}
           </NavLink>
 
           <NavLink
             to="/analytics"
             className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-1.5 rounded transition-colors ${
+              `flex items-center gap-2 px-3 py-1.5 rounded transition-all ${
                 isActive
-                  ? 'bg-slate-800 text-white font-medium border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`
             }
           >
-            <Activity className="w-3.5 h-3.5 text-blue-400" />
+            <Activity className="w-3.5 h-3.5 text-blue-700" />
             <span>FORENSIC LAB</span>
           </NavLink>
 
@@ -103,19 +109,19 @@ export default function Header({ wsStatus = 'disconnected', latency = 0, isStrea
             to="/"
             end
             className={({ isActive }) =>
-              `flex items-center gap-2 px-3 py-1.5 rounded transition-colors ${
+              `flex items-center gap-2 px-3 py-1.5 rounded transition-all ${
                 isActive
-                  ? 'bg-slate-800 text-white font-medium border border-slate-700'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs border border-slate-200/80'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`
             }
           >
-            <Cpu className="w-3.5 h-3.5 text-slate-400" />
+            <Cpu className="w-3.5 h-3.5 text-amber-700" />
             <span>SYSTEM BRIEFING</span>
           </NavLink>
         </nav>
 
-        {/* Right: Status Telemetry */}
+        {/* Right: Status Telemetry Badge */}
         <div className="flex items-center gap-3">
           {getStatusBadge()}
         </div>
