@@ -1,7 +1,7 @@
 import math
 import time
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 import numpy as np
 import torch
@@ -9,6 +9,7 @@ import torch.nn.functional as F
 
 from truedhwani.config import settings, WEIGHTS_DIR
 from truedhwani.deepfake.aasist_model import Model as AASISTModel
+from truedhwani.deepfake.forensic_features import ForensicBiomarkerExtractor, BiomarkerResult
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,8 @@ class DeepfakeResult:
     inference_time_ms: float
     raw_logits: list[float]
     model_name: str
+    biomarkers: dict[str, float] = field(default_factory=dict)
+
 
 
 class DeepfakeService:
@@ -50,6 +53,7 @@ class DeepfakeService:
         self.target_samples = settings.deepfake.target_samples  # 64,600 samples
         self.model = None
 
+        self.biomarkers = ForensicBiomarkerExtractor(sample_rate=16000)
         self._load_model()
 
     def _load_model(self):
@@ -98,46 +102,61 @@ class DeepfakeService:
 
     def predict(self, audio: np.ndarray) -> DeepfakeResult:
         """
-        Run deepfake detection on an audio chunk.
-        Returns: DeepfakeResult with score, prediction, confidence, and inference time.
+        Run deepfake detection on an audio chunk using multi-factor ensemble:
+        1. AASIST raw waveform neural graph-attention network
+        2. Forensic acoustic biomarkers (pitch jitter, HNR, vocoder flatness, breath continuity)
+        Returns: DeepfakeResult with calibrated score, prediction, confidence, and biomarker telemetry.
         """
         start_time = time.perf_counter()
 
         if audio.ndim > 1:
             audio = audio.flatten()
 
-        # Prepare 64,600 samples tensor
+        # Extract forensic acoustic biomarkers
+        bio_res = self.biomarkers.extract(audio)
+
+        # Prepare 64,600 samples tensor for AASIST
         proc_audio = self._pad_or_trim(audio).astype(np.float32)
         tensor = torch.from_numpy(proc_audio).unsqueeze(0).to(self.device)
 
         with torch.no_grad():
             _, logits = self.model(tensor)
-            # Logits shape: (1, 2) where index 0 = Spoof, index 1 = Bonafide
             logit_spoof = float(logits[0, 0].item())
             logit_bonafide = float(logits[0, 1].item())
 
-        # ASVspoof 2019 LA logit calibration:
-        # AASIST was trained with CrossEntropyLoss(weight=[0.1, 0.9]) creating an inherent ~ +2.2 prior shift.
-        # The official Clova AI AASIST evaluation metric uses Δ = logit_spoof - logit_bonafide.
-        # We apply prior bias correction (bias = 2.0) and temperature scaling (T = 1.8) into a calibrated probability [0, 1].
+        # ASVspoof 2019 LA calibrated logit probability
         diff = logit_spoof - logit_bonafide
         calibrated_z = (diff - 2.0) / 1.8
         clamped_z = max(-20.0, min(20.0, calibrated_z))
-        p_spoof = 1.0 / (1.0 + math.exp(-clamped_z))
-        p_bonafide = 1.0 - p_spoof
+        p_aasist = 1.0 / (1.0 + math.exp(-clamped_z))
 
-        # Prediction threshold at 0.50
-        is_spoof = p_spoof >= 0.50
+        # Multi-factor Ensemble Fusion
+        # Fuses raw waveform neural representation with physical acoustic biomarkers
+        p_biomarkers = bio_res.biomarker_spoof_prob
+        ensemble_spoof = 0.70 * p_aasist + 0.30 * p_biomarkers
+
+        # Reinforce detection when distinct vocoder high-frequency anomalies or unnatural pitch are present
+        if bio_res.vocoder_artifact_score > 0.40 and bio_res.pitch_jitter_pct < 0.25:
+            ensemble_spoof = max(ensemble_spoof, 0.65)
+
+        # Solidify bonafide status when both models confirm human vocal characteristics
+        if p_aasist < 0.15 and p_biomarkers < 0.15:
+            ensemble_spoof = min(ensemble_spoof, 0.08)
+
+        final_spoof = min(1.0, max(0.01, round(ensemble_spoof, 4)))
+        is_spoof = final_spoof >= 0.50
         prediction = "Spoof" if is_spoof else "Bonafide"
-        confidence = p_spoof if is_spoof else p_bonafide
+        confidence = final_spoof if is_spoof else round(1.0 - final_spoof, 4)
 
         inference_time_ms = (time.perf_counter() - start_time) * 1000.0
 
         return DeepfakeResult(
-            deepfake_score=round(p_spoof, 4),
+            deepfake_score=final_spoof,
             prediction=prediction,
-            confidence=round(confidence, 4),
+            confidence=confidence,
             inference_time_ms=round(inference_time_ms, 2),
             raw_logits=[round(logit_spoof, 4), round(logit_bonafide, 4)],
-            model_name="AASIST",
+            model_name="AASIST + Forensic Biomarkers",
+            biomarkers=bio_res.metrics_summary,
         )
+

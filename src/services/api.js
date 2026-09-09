@@ -1,39 +1,36 @@
-const API_BASE = '/api';
-
-export async function fetchHealth() {
-  const response = await fetch(`${API_BASE}/health`);
-  if (!response.ok) {
-    throw new Error(`Health check failed: ${response.status}`);
-  }
-  return response.json();
-}
+/**
+ * TrueDhwani REST API Service
+ */
 
 export async function fetchPresets() {
-  const response = await fetch(`${API_BASE}/presets`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch presets: ${response.status}`);
+  const res = await fetch('/api/presets');
+  if (!res.ok) {
+    throw new Error(`Failed to load audio presets: ${res.statusText}`);
   }
-  return response.json();
+  return res.json();
 }
 
-export async function analyzeAudio(file) {
+export async function fetchHealth() {
+  const res = await fetch('/api/health');
+  if (!res.ok) {
+    throw new Error(`Health check failed: ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function analyzeAudioFile(file, onProgress) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch(`${API_BASE}/analyze-audio`, {
+  const res = await fetch('/api/analyze-audio', {
     method: 'POST',
     body: formData,
   });
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Upload failed' }));
-    throw new Error(error.detail || `Analysis failed: ${response.status}`);
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.detail || `File analysis failed: ${res.statusText}`);
   }
 
-  return response.json();
-}
-
-export function createStreamConnection() {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  return new WebSocket(`${protocol}//${window.location.host}/ws/stream`);
+  return res.json();
 }

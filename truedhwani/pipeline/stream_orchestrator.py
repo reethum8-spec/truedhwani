@@ -43,9 +43,11 @@ class StreamPacket:
     distilbert_intent_probabilities: dict[str, float] = field(default_factory=dict)
     adaptive_fusion_weights: dict[str, float] = field(default_factory=dict)
     ema_smoothed_risk: float = 0.0
+    biomarkers: dict[str, float] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return asdict(self)
+
 
 
 class StreamPipelineOrchestrator:
@@ -215,6 +217,8 @@ class StreamPipelineOrchestrator:
             distilbert_intent_probabilities=nlp_res.category_scores,
             adaptive_fusion_weights=fusion_res.weights,
             ema_smoothed_risk=smoothed_risk_pct,
+            biomarkers=deepfake_res.biomarkers,
         )
 
         return packet
+

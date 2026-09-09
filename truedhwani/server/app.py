@@ -564,10 +564,20 @@ SIMPLE_HTML_PAGE = """<!DOCTYPE html>
 
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/live-monitor", response_class=HTMLResponse)
+@app.get("/analytics", response_class=HTMLResponse)
 @app.get("/test", response_class=HTMLResponse)
-@app.get("/simple", response_class=HTMLResponse)
 async def index():
-    """Serve the real-time AI testing dashboard."""
+    """Serve the modern forensic workstation frontend if built, or fallback to simple page."""
+    index_file = DIST_DIR / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    return HTMLResponse(content=SIMPLE_HTML_PAGE)
+
+
+@app.get("/simple", response_class=HTMLResponse)
+async def simple_view():
+    """Fallback legacy lightweight dashboard."""
     return HTMLResponse(content=SIMPLE_HTML_PAGE)
 
 

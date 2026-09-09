@@ -1,14 +1,119 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: light;
+@layer base {
+  :root {
+    --bg-main: #0b0f15;
+    --bg-card: #111823;
+    --bg-elevated: #16202f;
+    --bg-well: #080c11;
+    --border-subtle: #1e293b;
+    --border-medium: #334155;
+    --border-accent: #475569;
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --status-secure: #059669;
+    --status-secure-text: #34d399;
+    --status-secure-bg: rgba(5, 150, 105, 0.12);
+    --status-secure-border: #065f46;
+    
+    --status-caution: #d97706;
+    --status-caution-text: #fbbf24;
+    --status-caution-bg: rgba(217, 119, 6, 0.12);
+    --status-caution-border: #92400e;
+    
+    --status-threat: #dc2626;
+    --status-threat-text: #f87171;
+    --status-threat-bg: rgba(220, 38, 38, 0.15);
+    --status-threat-border: #991b1b;
+    
+    --status-telemetry: #2563eb;
+    --status-telemetry-text: #60a5fa;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #ffffff;
-  color: #111827;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  -webkit-font-smoothing: antialiased;
+/* Custom Tactical Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080c11;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Forensic Terminal / Workstation Utilities */
+.tactical-border {
+  border: 1px solid #1e293b;
+}
+
+.tactical-card {
+  background-color: #111823;
+  border: 1px solid #1e293b;
+}
+
+.tactical-well {
+  background-color: #080c11;
+  border: 1px solid #172030;
+}
+
+.tactical-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+/* Precision status indicators */
+.status-indicator-pulse {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-indicator-pulse::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+  animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radar-ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
